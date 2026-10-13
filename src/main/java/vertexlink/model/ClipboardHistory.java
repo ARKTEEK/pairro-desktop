@@ -1,4 +1,4 @@
-package vertexlink.controller;
+package vertexlink.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;

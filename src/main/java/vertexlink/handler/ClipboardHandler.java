@@ -4,9 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import vertexlink.controller.ClipboardController;
-import vertexlink.controller.ClipboardHistory;
-import vertexlink.controller.ClipboardMonitor;
+import vertexlink.model.ClipboardHistory;
 import vertexlink.network.server.ClientHandler;
+import vertexlink.service.ClipboardMonitor;
 
 public class ClipboardHandler {
   private static final String CLIPBOARD_GET = "CLIPBOARD_GET";
