@@ -36,7 +36,7 @@ public class AppCoordinator {
     this.pairing.setEventListener(listener);
   }
 
-  public void setConnectionStateListener(Consumer<Boolean> listener) {
+ public void setConnectionStateListener(Consumer<Boolean> listener) {
     this.connectionStateListener = listener;
   }
 

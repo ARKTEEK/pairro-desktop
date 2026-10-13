@@ -20,13 +20,15 @@ public class DeviceHeaderCard extends VBox {
   private final Label statusLabel = new Label();
   private final Button powerBtn;
   private final Button refreshBtn;
+  private final Button settingsBtn;
   private boolean lastConnected = false;
 
   public DeviceHeaderCard(
       String deviceName,
       boolean connected,
       Runnable onToggleConnection,
-      Runnable onRefresh) {
+      Runnable onRefresh,
+      Runnable onOpenSettings) {
     super(0);
     getStyleClass().add("header-card");
 
@@ -68,9 +70,17 @@ public class DeviceHeaderCard extends VBox {
       }
     });
 
+    settingsBtn = ComponentFactory.createIconButton(IconPaths.SETTINGS, "header-action-btn");
+    ComponentFactory.setTooltip(settingsBtn, "Settings");
+    settingsBtn.setOnAction(e -> {
+      if (onOpenSettings != null) {
+        onOpenSettings.run();
+      }
+    });
+
     setConnected(connected);
 
-    HBox actions = new HBox(6, refreshBtn, powerBtn);
+    HBox actions = new HBox(6, settingsBtn, refreshBtn, powerBtn);
     actions.setAlignment(Pos.CENTER_RIGHT);
 
     HBox topRow = new HBox(8, deviceDetails, spacer, actions);

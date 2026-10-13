@@ -31,6 +31,7 @@ import vertexlink.network.session.UDPSessionState;
 import vertexlink.pairing.PairingCoordinator;
 import vertexlink.pairing.PairingService;
 import vertexlink.store.PairedDeviceStore;
+import vertexlink.store.SettingsStore;
 import vertexlink.ui.resources.global.ResizableCanvas;
 import vertexlink.ui.resources.global.TitleBar;
 import vertexlink.ui.view.DashboardView;
@@ -44,10 +45,11 @@ public class App extends Application {
   public void start(Stage primaryStage) {
     primaryStage.initStyle(StageStyle.UNDECORATED);
 
+    SettingsStore settingsStore = new SettingsStore();
     TitleBar titleBar = new TitleBar(primaryStage, "VertexLink");
 
     AppCoordinator controller = createAppCoordinator();
-    DashboardView dashboard = new DashboardView(primaryStage, controller);
+    DashboardView dashboard = new DashboardView(primaryStage, controller, settingsStore);
 
     ResizableCanvas canvas = new ResizableCanvas();
     canvas.getStyleClass().add("white-canvas");

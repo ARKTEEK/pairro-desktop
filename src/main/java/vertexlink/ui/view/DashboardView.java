@@ -18,24 +18,29 @@ import vertexlink.AppCoordinator;
 import vertexlink.device.Device;
 import vertexlink.listener.DashboardEventListener;
 import vertexlink.network.server.ClientHandler;
+import vertexlink.store.SettingsStore;
 import vertexlink.ui.resources.PairingBanner;
 import vertexlink.ui.resources.device.DevicesListPanel;
 import vertexlink.ui.resources.information.InformationPanel;
+import vertexlink.ui.resources.settings.SettingsPanel;
 
 public class DashboardView implements DashboardEventListener {
   private static final double SHEET_OFFSET = 700;
+  private static final double SETTINGS_OFFSET = 470;
 
   private final VBox rootContainer;
   private final StackPane mainContent;
   private final Region scrim = new Region();
   private ParallelTransition sheetAnimation;
+  private TranslateTransition settingsAnimation;
+  private SettingsPanel settingsPanel;
   private final PairingBanner pairingBanner = new PairingBanner();
 
   private DevicesListPanel devicesListPanel;
   private InformationPanel informationPanel;
   private final AppCoordinator controller;
 
-  public DashboardView(Stage ownerStage, AppCoordinator controller) {
+  public DashboardView(Stage ownerStage, AppCoordinator controller, SettingsStore settingsStore) {
     this.controller = controller;
 
     this.controller.setEventListener(this);
@@ -48,7 +53,10 @@ public class DashboardView implements DashboardEventListener {
     scrim.setVisible(false);
     scrim.setOnMouseClicked(e -> closeInformationPanel());
 
-    mainContent = new StackPane(devicesListPanel, scrim, informationPanel);
+    settingsPanel = new SettingsPanel(this::closeSettings, settingsStore);
+    settingsPanel.setVisible(false);
+
+    mainContent = new StackPane(devicesListPanel, scrim, informationPanel, settingsPanel);
     mainContent.getStyleClass().add("dashboard-main");
     StackPane.setAlignment(informationPanel, Pos.BOTTOM_CENTER);
 
@@ -74,7 +82,8 @@ public class DashboardView implements DashboardEventListener {
         controller::unpairDevice,
         this::handleToggleConnection,
         controller::refreshDevices,
-        controller::disconnectConnectedDevice);
+        controller::disconnectConnectedDevice,
+        this::openSettings);
 
     devicesListPanel.setConnectedDevice(controller.getConnectedDevice());
   }
@@ -133,6 +142,39 @@ public class DashboardView implements DashboardEventListener {
     if (sheetAnimation != null) {
       sheetAnimation.stop();
       sheetAnimation = null;
+    }
+  }
+
+  private void openSettings() {
+    stopSettingsAnimation();
+
+    settingsPanel.setTranslateX(SETTINGS_OFFSET);
+    settingsPanel.setVisible(true);
+
+    settingsAnimation = new TranslateTransition(Duration.millis(240), settingsPanel);
+    settingsAnimation.setToX(0);
+    settingsAnimation.setInterpolator(Interpolator.EASE_OUT);
+    settingsAnimation.play();
+  }
+
+  private void closeSettings() {
+    if (!settingsPanel.isVisible()) {
+      return;
+    }
+
+    stopSettingsAnimation();
+
+    settingsAnimation = new TranslateTransition(Duration.millis(190), settingsPanel);
+    settingsAnimation.setToX(SETTINGS_OFFSET);
+    settingsAnimation.setInterpolator(Interpolator.EASE_IN);
+    settingsAnimation.setOnFinished(e -> settingsPanel.setVisible(false));
+    settingsAnimation.play();
+  }
+
+  private void stopSettingsAnimation() {
+    if (settingsAnimation != null) {
+      settingsAnimation.stop();
+      settingsAnimation = null;
     }
   }
 

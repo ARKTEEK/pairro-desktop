@@ -37,7 +37,8 @@ public class DevicesListPanel extends VBox {
       Consumer<Device> onUnpairDevice,
       Runnable onToggleConnection,
       Runnable onRefresh,
-      Runnable onDisconnect) {
+      Runnable onDisconnect,
+      Runnable onOpenSettings) {
     super(0);
     this.onSelectDevice = onSelectDevice;
     this.onUnpairDevice = onUnpairDevice;
@@ -46,7 +47,7 @@ public class DevicesListPanel extends VBox {
     getStyleClass().add("devices-panel");
     setPrefWidth(260);
 
-    this.headerCard = new DeviceHeaderCard(deviceName, connected, onToggleConnection, onRefresh);
+    this.headerCard = new DeviceHeaderCard(deviceName, connected, onToggleConnection, onRefresh, onOpenSettings);
     DeviceSearchBar searchBar = new DeviceSearchBar(this::filter);
 
     VBox heroArea = new VBox(12, headerCard, searchBar);
