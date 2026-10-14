@@ -2,11 +2,18 @@ package vertexlink;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import vertexlink.controller.ClipboardController;
 import vertexlink.controller.KeyboardController;
 import vertexlink.controller.MouseController;
@@ -32,6 +39,7 @@ import vertexlink.pairing.PairingCoordinator;
 import vertexlink.pairing.PairingService;
 import vertexlink.store.PairedDeviceStore;
 import vertexlink.store.SettingsStore;
+import vertexlink.system.IconLoader;
 import vertexlink.system.TrayManager;
 import vertexlink.ui.resources.global.ResizableCanvas;
 import vertexlink.ui.resources.global.TitleBar;
@@ -41,13 +49,15 @@ public class App extends Application {
   private static final int TCP_PORT = 28401;
   private static final int UDP_PORT = 28402;
   private static final String DESKTOP_NAME = "DesktopServer";
+  private static final String APP_TITLE = "VertexLink";
 
   @Override
   public void start(Stage primaryStage) {
     primaryStage.initStyle(StageStyle.UNDECORATED);
+    primaryStage.setTitle(APP_TITLE);
+    primaryStage.getIcons().addAll(loadIcons());
 
     SettingsStore settingsStore = new SettingsStore();
-
     TrayManager trayManager = new TrayManager(primaryStage, settingsStore);
 
     primaryStage.setOnCloseRequest(e -> {
@@ -55,7 +65,7 @@ public class App extends Application {
       trayManager.handleClose();
     });
 
-    TitleBar titleBar = new TitleBar(primaryStage, "VertexLink", trayManager::handleClose);
+    TitleBar titleBar = new TitleBar(primaryStage, APP_TITLE, trayManager::handleClose);
 
     AppCoordinator controller = createAppCoordinator();
     DashboardView dashboard = new DashboardView(primaryStage, controller, settingsStore);
@@ -79,6 +89,22 @@ public class App extends Application {
     primaryStage.setScene(scene);
     primaryStage.show();
   }
+
+  private List<Image> loadIcons() {
+      List<Image> icons = new ArrayList<>();
+
+      for (int size : IconLoader.getIconSizes()) {
+        try (InputStream inputStream = IconLoader.loadIconStream(size)) {
+          if (inputStream != null) {
+            icons.add(new Image(inputStream));
+          }
+        } catch (IOException exception) {
+          System.err.println("[App] Could not load icon: " + exception.getMessage());
+        }
+      }
+
+      return icons;
+    }
 
   private AppCoordinator createAppCoordinator() {
     DeviceIdentity identity = new DeviceIdentity();
