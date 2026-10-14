@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import vertexlink.enums.DeviceStatus;
 import vertexlink.network.server.ClientHandler;
 
 public class DeviceState {

@@ -3,8 +3,6 @@ package vertexlink.network;
 import java.net.InetAddress;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import vertexlink.listener.NetworkDataListener;
-import vertexlink.listener.NetworkPairingListener;
 import vertexlink.network.protocol.InboundMessageRouter;
 import vertexlink.network.server.ClientHandler;
 import vertexlink.network.server.TCPServer;

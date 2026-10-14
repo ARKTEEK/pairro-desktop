@@ -11,8 +11,6 @@ import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceListener;
 
-import vertexlink.listener.DeviceDiscoveredListener;
-
 public class DeviceScanner {
   private JmDNS jmdns;
   private ServiceListener listener;

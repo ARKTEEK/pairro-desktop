@@ -1,0 +1,50 @@
+package vertexlink.ui.component.common;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.stage.Stage;
+
+import vertexlink.ui.icon.IconPaths;
+
+public class TitleBar extends HBox {
+  private double dragOffsetX;
+  private double dragOffsetY;
+
+  public TitleBar(Stage stage, String title, Runnable onClose) {
+    getStyleClass().add("title-bar");
+    setAlignment(Pos.CENTER_LEFT);
+    setPadding(new Insets(0, 6, 0, 10));
+    setSpacing(6);
+
+    Label titleLabel = new Label(title);
+    titleLabel.getStyleClass().add("title-bar-label");
+
+    Region spacer = new Region();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+    Button minimizeBtn = ComponentFactory.createIconButton(IconPaths.MINIMIZE, "title-bar-button");
+    ComponentFactory.setTooltip(minimizeBtn, "Minimize");
+    minimizeBtn.setOnAction(e -> stage.setIconified(true));
+
+    Button closeBtn = ComponentFactory.createIconButton(IconPaths.CLOSE, "title-bar-button close-window");
+    ComponentFactory.setTooltip(closeBtn, "Close");
+    closeBtn.setOnAction(e -> onClose.run());
+
+    getChildren().addAll(titleLabel, spacer, minimizeBtn, closeBtn);
+
+    setOnMousePressed(e -> {
+      dragOffsetX = e.getSceneX();
+      dragOffsetY = e.getSceneY();
+    });
+
+    setOnMouseDragged(e -> {
+      stage.setX(e.getScreenX() - dragOffsetX);
+      stage.setY(e.getScreenY() - dragOffsetY);
+    });
+  }
+}

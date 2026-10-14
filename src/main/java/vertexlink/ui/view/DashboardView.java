@@ -14,15 +14,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import vertexlink.AppCoordinator;
+
+import vertexlink.app.AppCoordinator;
 import vertexlink.device.Device;
-import vertexlink.listener.DashboardEventListener;
 import vertexlink.network.server.ClientHandler;
+import vertexlink.pairing.DashboardEventListener;
 import vertexlink.store.SettingsStore;
-import vertexlink.ui.resources.PairingBanner;
-import vertexlink.ui.resources.device.DevicesListPanel;
-import vertexlink.ui.resources.information.InformationPanel;
-import vertexlink.ui.resources.settings.SettingsPanel;
+import vertexlink.ui.component.device.DevicesListPanel;
+import vertexlink.ui.component.information.InformationPanel;
+import vertexlink.ui.component.pairing.PairingBanner;
+import vertexlink.ui.component.settings.SettingsPanel;
 
 public class DashboardView implements DashboardEventListener {
   private static final double SHEET_OFFSET = 700;

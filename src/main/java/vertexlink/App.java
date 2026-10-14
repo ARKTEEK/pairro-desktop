@@ -1,5 +1,10 @@
 package vertexlink;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -9,27 +14,23 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import vertexlink.controller.ClipboardController;
-import vertexlink.controller.KeyboardController;
-import vertexlink.controller.MouseController;
-import vertexlink.controller.PeripheralControllers;
-import vertexlink.controller.audio.AudioController;
+import vertexlink.app.AppCoordinator;
+import vertexlink.app.PeripheralControllers;
+import vertexlink.audio.AudioController;
+import vertexlink.clipboard.ClipboardController;
 import vertexlink.device.DeviceDirectory;
 import vertexlink.device.DeviceIdentity;
 import vertexlink.device.DeviceState;
-import vertexlink.handler.AudioHandler;
-import vertexlink.handler.ClipboardHandler;
-import vertexlink.handler.KeyboardInputHandler;
-import vertexlink.handler.MouseInputHandler;
-import vertexlink.listener.NetworkPairingListener;
+import vertexlink.input.KeyboardController;
+import vertexlink.input.MouseController;
 import vertexlink.network.NetworkManager;
+import vertexlink.network.NetworkPairingListener;
 import vertexlink.network.discovery.DeviceBroadcaster;
 import vertexlink.network.discovery.DeviceScanner;
+import vertexlink.network.handler.AudioHandler;
+import vertexlink.network.handler.ClipboardHandler;
+import vertexlink.network.handler.KeyboardInputHandler;
+import vertexlink.network.handler.MouseInputHandler;
 import vertexlink.network.lifecycle.ConnectionLifecycleManager;
 import vertexlink.network.protocol.InboundMessageRouter;
 import vertexlink.network.protocol.ProtocolMessenger;
@@ -39,10 +40,10 @@ import vertexlink.pairing.PairingCoordinator;
 import vertexlink.pairing.PairingService;
 import vertexlink.store.PairedDeviceStore;
 import vertexlink.store.SettingsStore;
-import vertexlink.system.IconLoader;
-import vertexlink.system.TrayManager;
-import vertexlink.ui.resources.global.ResizableCanvas;
-import vertexlink.ui.resources.global.TitleBar;
+import vertexlink.ui.component.common.ResizableCanvas;
+import vertexlink.ui.component.common.TitleBar;
+import vertexlink.ui.icon.IconLoader;
+import vertexlink.ui.tray.TrayManager;
 import vertexlink.ui.view.DashboardView;
 
 public class App extends Application {
@@ -114,7 +115,7 @@ public class App extends Application {
 
     MouseController mouseController = PeripheralControllers.createMouseController();
     KeyboardController keyboardController = PeripheralControllers.createKeyboardController();
-    AudioController audioController = PeripheralControllers.creaAudioController();
+    AudioController audioController = PeripheralControllers.createAudioController();
     ClipboardController clipboardController = PeripheralControllers.createClipboardController();
 
     MouseInputHandler mouseInputHandler = new MouseInputHandler(mouseController);

@@ -1,11 +1,11 @@
 package vertexlink.network.protocol;
 
-import vertexlink.handler.AudioHandler;
-import vertexlink.handler.ClipboardHandler;
-import vertexlink.handler.KeyboardInputHandler;
-import vertexlink.handler.MouseInputHandler;
-import vertexlink.listener.NetworkDataListener;
-import vertexlink.listener.NetworkPairingListener;
+import vertexlink.network.NetworkDataListener;
+import vertexlink.network.NetworkPairingListener;
+import vertexlink.network.handler.AudioHandler;
+import vertexlink.network.handler.ClipboardHandler;
+import vertexlink.network.handler.KeyboardInputHandler;
+import vertexlink.network.handler.MouseInputHandler;
 import vertexlink.network.server.ClientHandler;
 
 public class InboundMessageRouter {

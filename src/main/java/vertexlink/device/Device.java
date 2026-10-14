@@ -1,7 +1,5 @@
 package vertexlink.device;
 
-import vertexlink.enums.DeviceStatus;
-
 public class Device {
   private String id;
   private String name;

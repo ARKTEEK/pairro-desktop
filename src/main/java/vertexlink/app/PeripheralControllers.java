@@ -1,0 +1,48 @@
+package vertexlink.app;
+
+import vertexlink.audio.AudioController;
+import vertexlink.clipboard.ClipboardController;
+import vertexlink.input.KeyboardController;
+import vertexlink.input.MouseController;
+
+public final class PeripheralControllers {
+  public static MouseController createMouseController() {
+    try {
+      return new MouseController();
+    } catch (Exception e) {
+      System.err.println("[Dashboard] Mouse control unavailable: " + e.getMessage());
+
+      return null;
+    }
+  }
+
+  public static KeyboardController createKeyboardController() {
+    try {
+      return new KeyboardController();
+    } catch (Exception e) {
+      System.err.println("[Dashboard] Keyboard control unavailable: " + e.getMessage());
+
+      return null;
+    }
+  }
+
+  public static AudioController createAudioController() {
+    try {
+      return new AudioController();
+    } catch (Exception e) {
+      System.err.println("[Dashboard] Audio control unavailable: " + e.getMessage());
+
+      return null;
+    }
+  }
+
+  public static ClipboardController createClipboardController() {
+    try {
+      return new ClipboardController();
+    } catch (Exception e) {
+      System.err.println("[Dashboard] Clipboard control unavailable: " + e.getMessage());
+
+      return null;
+    }
+  }
+}

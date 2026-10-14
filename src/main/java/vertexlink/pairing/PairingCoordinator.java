@@ -2,9 +2,8 @@ package vertexlink.pairing;
 
 import vertexlink.device.Device;
 import vertexlink.device.DeviceDirectory;
-import vertexlink.listener.DashboardEventListener;
-import vertexlink.listener.NetworkPairingListener;
 import vertexlink.network.NetworkManager;
+import vertexlink.network.NetworkPairingListener;
 import vertexlink.network.protocol.ProtocolMessenger;
 import vertexlink.network.security.CryptoUtils;
 import vertexlink.network.server.ClientHandler;
