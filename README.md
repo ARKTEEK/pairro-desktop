@@ -1,9 +1,9 @@
-# VertexLink-Desktop
+# pairro-Desktop
 > **Warning**
-> 
+>
 > This project is currently a **Work in Progress (WIP)**. Features, protocols, and APIs are subject to change.
 
-VertexLink-Desktop is a Java-based desktop application designed to work with [VertexLink-Android](https://github.com/arkteek/vertexlink-android). It enables users to remotely control their desktop environment's mouse, keyboard, clipboard and audio directly from an Android device with little to no delay.
+pairro-Desktop is a Java-based desktop application designed to work with [pairro-Android](https://github.com/arkteek/pairro-android). It enables users to remotely control their desktop environment's mouse, keyboard, clipboard and audio directly from an Android device with little to no delay.
 
 ## Features
 
@@ -19,13 +19,13 @@ VertexLink-Desktop is a Java-based desktop application designed to work with [Ve
 ## Prerequisites
 
 * **Java Runtime Environment (JRE)**: Java 17 or higher recommended.
-* **VertexLink-Android**: The mobile application required to control this host. Download the latest APK release from [github.com/arkteek/vertexlink-android](https://github.com/arkteek/vertexlink-android).
+* **pairro-Android**: The mobile application required to control this host. Download the latest APK release from [github.com/arkteek/pairro-android](https://github.com/arkteek/pairro-android).
 
 ## Getting Started
 
 ### Installation
 
-1. Download the latest release from the [Releases](https://github.com/arkteek/vertexlink-desktop/releases) section.
+1. Download the latest release from the [Releases](https://github.com/arkteek/pairro-desktop/releases) section.
 2. Ensure Java is installed and added to your system PATH:
    ```bash
    java -version
@@ -33,7 +33,7 @@ VertexLink-Desktop is a Java-based desktop application designed to work with [Ve
 
 ## Device Pairing & Security
 
-1. Launch **VertexLink-Desktop** on your PC.
-2. Open **VertexLink-Android** on your mobile device.
+1. Launch **pairro-Desktop** on your PC.
+2. Open **pairro-Android** on your mobile device.
 3. Initiate the ACK pairing process from the mobile app to negotiate keys and register the device.
 4. Once paired, the desktop host accepts secure TLS (TCP) and dTLS (UDP) sessions from the verified client. Unpaired devices are rejected by default.

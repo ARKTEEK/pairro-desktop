@@ -20,8 +20,8 @@ javafx {
 }
 
 application {
-  mainClass.set("vertexlink.App")
-  applicationName = "VertexLink"
+  mainClass.set("pairro.App")
+  applicationName = "Pairro"
 }
 
 java {
