@@ -3,12 +3,24 @@
 Pairro for Desktop is a Java-based desktop application designed to work with [Pairro for Android](https://github.com/arkteek/pairro-android). It allows users to remotely control their desktop environment's mouse, keyboard, clipboard, and audio directly from an Android device with minimal latency.
 
 ## Features
-- **Mouse Control**: Real-time cursor movement, left/right clicks, and scrolling.
-- **Keyboard Input**: Send keystrokes and text directly to the host machine.
-- **Clipboard Synchronization**: Share and sync clipboard text between mobile and desktop devices.
-- **Volume Management**: Adjust host device system volume remotely.
+
+* **Mouse Control**: Real-time cursor movement, left/right clicks, dragging and selection.
+* **Keyboard Input**:
+  * Send keystrokes directly to the host machine.
+  * Create custom key macros (e.g Win+E, Win+R).
+* **Clipboard Synchronization**: Share and sync clipboard text between mobile and desktop devices.
+* **Volume Management**: Adjust host device system volume remotely.
+
+## Security
+
+* **Encrypted Communication**:
+    * TLS: Secure TCP-based control commands and metadata.
+    * dTLS: Encrypts low-latency UDP packet streams.
+* **Strict Access Control**: All unverified attempts from unpaired devices get instantly rejected.
+* **Pairing Process**: Pairing works using ACK keys and a shared token to validate authorization before opening network sockets.
 
 ## Prerequisites
+
 - **Java Runtime Environment (JRE)**: Java 17 or higher recommended.
 - **Pairro for Android**: The mobile application required to control this host. Download the latest APK release from [HERE](https://github.com/arkteek/pairro-android).
 
@@ -16,12 +28,14 @@ Pairro for Desktop is a Java-based desktop application designed to work with [Pa
 ## Getting Started
 
 ### Installation
+
 1. Download the latest release from the [Releases](https://github.com/arkteek/pairro-desktop/releases) section.
 2. Ensure Java is installed and added to your system PATH:
    ```bash
    java -version
 
 ### Pairing & Usage
+
 1. Launch Pairro on your Desktop device.
 2. Launch Pairro on your Android device.
 3. Turn on Discoverability on both devices.
