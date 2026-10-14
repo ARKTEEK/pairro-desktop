@@ -1,9 +1,6 @@
-# pairro-Desktop
-> **Warning**
->
-> This project is currently a **Work in Progress (WIP)**. Features, protocols, and APIs are subject to change.
+# Pairro for Desktop
 
-pairro-Desktop is a Java-based desktop application designed to work with [pairro-Android](https://github.com/arkteek/pairro-android). It enables users to remotely control their desktop environment's mouse, keyboard, clipboard and audio directly from an Android device with little to no delay.
+Pairro for Desktop is a Java-based desktop application designed to work with [Pairro for Android](https://github.com/arkteek/pairro-android). It enables users to remotely control their desktop environment's mouse, keyboard, clipboard and audio directly from an Android device with little to no delay.
 
 ## Features
 
@@ -11,15 +8,11 @@ pairro-Desktop is a Java-based desktop application designed to work with [pairro
 * **Keyboard Input**: Send keystrokes and text directly to the host machine.
 * **Clipboard Synchronization**: Share and sync clipboard text between mobile and desktop devices.
 * **Volume Management**: Adjust host device system volume remotely.
-* **Secure Transport**:
-  * **TLS**: Secures TCP connections for control signals and reliable data transfer.
-  * **dTLS**: Secures UDP connections for low-latency stream data.
-* **ACK Pairing**: Strict authentication model ensuring only explicitly paired devices can establish TCP, UDP, or other network connections.
 
 ## Prerequisites
 
 * **Java Runtime Environment (JRE)**: Java 17 or higher recommended.
-* **pairro-Android**: The mobile application required to control this host. Download the latest APK release from [github.com/arkteek/pairro-android](https://github.com/arkteek/pairro-android).
+* **Pairro for Android**: The mobile application required to control this host. Download the latest APK release from [github.com/arkteek/pairro-android](https://github.com/arkteek/pairro-android).
 
 ## Getting Started
 
@@ -33,7 +26,7 @@ pairro-Desktop is a Java-based desktop application designed to work with [pairro
 
 ## Device Pairing & Security
 
-1. Launch **pairro-Desktop** on your PC.
-2. Open **pairro-Android** on your mobile device.
-3. Initiate the ACK pairing process from the mobile app to negotiate keys and register the device.
+1. Launch **Pairro** on your PC.
+2. Launch **Pairro** on your Android device.
+3. Initiate the pairing process from the android app to negotiate keys and register the device.
 4. Once paired, the desktop host accepts secure TLS (TCP) and dTLS (UDP) sessions from the verified client. Unpaired devices are rejected by default.
