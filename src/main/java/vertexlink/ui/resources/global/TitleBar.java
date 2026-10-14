@@ -13,7 +13,7 @@ public class TitleBar extends HBox {
   private double dragOffsetX;
   private double dragOffsetY;
 
-  public TitleBar(Stage stage, String title) {
+  public TitleBar(Stage stage, String title, Runnable onClose) {
     getStyleClass().add("title-bar");
     setAlignment(Pos.CENTER_LEFT);
     setPadding(new Insets(0, 6, 0, 10));
@@ -31,7 +31,7 @@ public class TitleBar extends HBox {
 
     Button closeBtn = ComponentFactory.createIconButton(IconPaths.CLOSE, "title-bar-button close-window");
     ComponentFactory.setTooltip(closeBtn, "Close");
-    closeBtn.setOnAction(e -> stage.close());
+    closeBtn.setOnAction(e -> onClose.run());
 
     getChildren().addAll(titleLabel, spacer, minimizeBtn, closeBtn);
 

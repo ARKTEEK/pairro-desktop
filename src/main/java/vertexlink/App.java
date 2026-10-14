@@ -32,6 +32,7 @@ import vertexlink.pairing.PairingCoordinator;
 import vertexlink.pairing.PairingService;
 import vertexlink.store.PairedDeviceStore;
 import vertexlink.store.SettingsStore;
+import vertexlink.system.TrayManager;
 import vertexlink.ui.resources.global.ResizableCanvas;
 import vertexlink.ui.resources.global.TitleBar;
 import vertexlink.ui.view.DashboardView;
@@ -46,7 +47,15 @@ public class App extends Application {
     primaryStage.initStyle(StageStyle.UNDECORATED);
 
     SettingsStore settingsStore = new SettingsStore();
-    TitleBar titleBar = new TitleBar(primaryStage, "VertexLink");
+
+    TrayManager trayManager = new TrayManager(primaryStage, settingsStore);
+
+    primaryStage.setOnCloseRequest(e -> {
+      e.consume();
+      trayManager.handleClose();
+    });
+
+    TitleBar titleBar = new TitleBar(primaryStage, "VertexLink", trayManager::handleClose);
 
     AppCoordinator controller = createAppCoordinator();
     DashboardView dashboard = new DashboardView(primaryStage, controller, settingsStore);
