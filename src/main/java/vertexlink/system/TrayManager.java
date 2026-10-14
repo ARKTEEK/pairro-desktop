@@ -20,8 +20,6 @@ import vertexlink.store.SettingsStore;
 
 public class TrayManager {
   private static final String TOOLTIP = "VertexLink";
-  private static final int[] ICON_SIZES = {16, 32, 48, 64, 128, 256, 512};
-  private static final String ICON_PATH = "/icons/icon-%d.png";
 
   private final Stage stage;
   private final SettingsStore settingsStore;
@@ -120,33 +118,26 @@ public class TrayManager {
   }
 
   private Image loadImage() {
-    Dimension trayIconSize = SystemTray.getSystemTray().getTrayIconSize();
-    int target = Math.max(trayIconSize.width, trayIconSize.height);
+      Dimension trayIconSize = SystemTray.getSystemTray().getTrayIconSize();
+      int targetSize = Math.max(trayIconSize.width, trayIconSize.height);
+      int bestSize = IconLoader.findBestSize(targetSize);
 
-    for (int size : ICON_SIZES) {
-      if (size >= target) {
-        return readImage(size);
-      }
+      return readImage(bestSize);
     }
 
-    return readImage(ICON_SIZES[ICON_SIZES.length - 1]);
-  }
+    private Image readImage(int size) {
+      try (InputStream inputStream = IconLoader.loadIconStream(size)) {
+        if (inputStream == null) {
+          System.err.println("[Tray] Icon not found for size: " + size);
 
-  private Image readImage(int size) {
-    String path = String.format(ICON_PATH, size);
+          return null;
+        }
 
-    try (InputStream in = TrayManager.class.getResourceAsStream(path)) {
-      if (in == null) {
-        System.err.println("[Tray] Icon not found: " + path);
+        return ImageIO.read(inputStream);
+      } catch (IOException exception) {
+        System.err.println("[Tray] Could not read icon: " + exception.getMessage());
 
         return null;
       }
-
-      return ImageIO.read(in);
-    } catch (IOException e) {
-      System.err.println("[Tray] Could not read icon " + path + ": " + e.getMessage());
-
-      return null;
     }
-  }
 }
