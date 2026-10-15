@@ -73,7 +73,8 @@ public class SettingsPanel extends VBox {
             SettingsRows.switchRow(
                 "Auto-start discoverability",
                 "Become visible to phones as soon as the app opens",
-                settingsStore.isAutoStartDiscoverability())),
+                settingsStore.isAutoStartDiscoverability(),
+                settingsStore::setAutoStartDiscoverability)),
 
         new SettingsCard("Behavior",
             SettingsRows.switchRow(
