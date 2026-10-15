@@ -44,6 +44,12 @@ public class InboundMessageRouter {
       return;
     }
 
+    if (client != null && !client.isAuthenticated()) {
+      routeUnauthenticated(data, client);
+
+      return;
+    }
+
     if (mouseInputHandler.handleCommand(data)) {
       return;
     }
@@ -70,6 +76,23 @@ public class InboundMessageRouter {
       routePing(client);
     } else {
       routeApplicationData(data, client);
+    }
+  }
+
+  private void routeUnauthenticated(String data, ClientHandler client) {
+    Protocol.Decoded decoded = Protocol.decode(data);
+
+    if ("PAIR_REQUEST".equals(decoded.type)) {
+      routePairRequest(decoded, client);
+    } else if ("AUTH".equals(decoded.type)) {
+      routeAuth(decoded, client);
+    } else if ("PING".equals(decoded.type)) {
+      routePing(client);
+    } else {
+      System.err.println("[Security] Closing unauthenticated connection from "
+          + client.getAddress().getHostAddress() + ": unexpected message");
+
+      client.close();
     }
   }
 

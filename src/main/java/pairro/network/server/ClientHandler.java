@@ -19,6 +19,7 @@ public class ClientHandler extends Thread {
   private BufferedReader reader;
   private BufferedWriter writer;
   private volatile boolean isRunning = true;
+  private volatile boolean authenticated = false;
 
   public ClientHandler(Socket socket, NetworkManager manager, TCPServer server) {
     this.socket = socket;
@@ -63,6 +64,14 @@ public class ClientHandler extends Thread {
     } catch (IOException e) {
       System.err.println("[TCP] Failed to send: " + e.getMessage());
     }
+  }
+
+  public boolean isAuthenticated() {
+    return authenticated;
+  }
+
+  public void markAuthenticated() {
+    authenticated = true;
   }
 
   public InetAddress getAddress() {

@@ -125,6 +125,7 @@ public class PairingCoordinator implements NetworkPairingListener {
       networkManager.setUdpSessionKey(sessionKey);
       networkManager.setTrustedUdpAddress(client.getAddress());
 
+      client.markAuthenticated();
       messenger.sendPairSuccess(client, desktopId, desktopName, token);
       devices.markPaired(addressKey, deviceName, deviceId);
 
@@ -172,6 +173,7 @@ public class PairingCoordinator implements NetworkPairingListener {
     networkManager.setUdpSessionKey(sessionKey);
     networkManager.setTrustedUdpAddress(client.getAddress());
 
+    client.markAuthenticated();
     messenger.sendAuthResult(client, true, null);
     devices.markConnected(addressKey, deviceName, deviceId, client);
 
