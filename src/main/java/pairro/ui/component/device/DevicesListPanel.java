@@ -116,6 +116,10 @@ public class DevicesListPanel extends VBox {
     }
   }
 
+  public void setDeviceName(String deviceName) {
+    headerCard.setDeviceName(deviceName);
+  }
+
   public void setConnected(boolean connected) {
     headerCard.setConnected(connected);
   }

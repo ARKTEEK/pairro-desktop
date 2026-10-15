@@ -1,5 +1,7 @@
 package pairro.ui.component.settings;
 
+import java.util.function.Consumer;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,13 +9,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import pairro.device.DeviceName;
 import pairro.store.SettingsStore;
 import pairro.ui.component.common.ComponentFactory;
 import pairro.ui.icon.IconPaths;
 
 public class SettingsPanel extends VBox {
 
-  public SettingsPanel(Runnable onBack, SettingsStore settingsStore) {
+  public SettingsPanel(Runnable onBack, SettingsStore settingsStore, Consumer<String> onDeviceNameChanged) {
     super(0);
     getStyleClass().add("settings-view");
 
@@ -55,7 +58,17 @@ public class SettingsPanel extends VBox {
                 "Device name",
                 "How this PC appears to other devices",
                 settingsStore.getDeviceName(),
-                "Desktop"),
+                DeviceName.DEFAULT,
+                raw -> {
+                  String name = DeviceName.normalize(raw);
+
+                  if (!name.equals(settingsStore.getDeviceName())) {
+                    settingsStore.setDeviceName(name);
+                    onDeviceNameChanged.accept(name);
+                  }
+
+                  return name;
+                }),
 
             SettingsRows.switchRow(
                 "Auto-start discoverability",

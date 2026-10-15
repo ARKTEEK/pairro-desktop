@@ -18,6 +18,7 @@ public class DeviceHeaderCard extends VBox {
   private static final String STATUS_OFF_CLASS = "status-off";
   private static final String STATUS_SHUTTING_DOWN_CLASS = "status-shutting-down";
 
+  private final Label nameLabel = new Label();
   private final Label statusLabel = new Label();
   private final Button powerBtn;
   private final Button refreshBtn;
@@ -33,7 +34,7 @@ public class DeviceHeaderCard extends VBox {
     super(0);
     getStyleClass().add("header-card");
 
-    Label nameLabel = new Label(deviceName);
+    nameLabel.setText(deviceName);
     nameLabel.getStyleClass().add("device-title");
 
     statusLabel.getStyleClass().add("status-badge");
@@ -97,6 +98,10 @@ public class DeviceHeaderCard extends VBox {
     body.getStyleClass().add("header-card-body");
 
     getChildren().addAll(captionBar, body);
+  }
+
+  public void setDeviceName(String deviceName) {
+    nameLabel.setText(deviceName);
   }
 
   public void setConnected(boolean connected) {

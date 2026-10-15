@@ -40,9 +40,14 @@ public class DashboardView implements DashboardEventListener {
   private DevicesListPanel devicesListPanel;
   private InformationPanel informationPanel;
   private final AppCoordinator controller;
+  private final SettingsStore settingsStore;
 
-  public DashboardView(Stage ownerStage, AppCoordinator controller, SettingsStore settingsStore) {
+  public DashboardView(
+    Stage ownerStage,
+    AppCoordinator controller,
+    SettingsStore settingsStore) {
     this.controller = controller;
+    this.settingsStore = settingsStore;
 
     this.controller.setEventListener(this);
     this.controller.setConnectionStateListener(this::onConnectionStateChanged);
@@ -54,7 +59,7 @@ public class DashboardView implements DashboardEventListener {
     scrim.setVisible(false);
     scrim.setOnMouseClicked(e -> closeInformationPanel());
 
-    settingsPanel = new SettingsPanel(this::closeSettings, settingsStore);
+    settingsPanel = new SettingsPanel(this::closeSettings, settingsStore, this::onDeviceNameChanged);
     settingsPanel.setVisible(false);
 
     mainContent = new StackPane(devicesListPanel, scrim, informationPanel, settingsPanel);
@@ -76,7 +81,7 @@ public class DashboardView implements DashboardEventListener {
     informationPanel.setVisible(false);
 
     devicesListPanel = new DevicesListPanel(
-        "Desktop",
+        settingsStore.getDeviceName(),
         controller.isConnected(),
         controller.getDevicesList(),
         this::onDeviceSelected,
@@ -177,6 +182,11 @@ public class DashboardView implements DashboardEventListener {
       settingsAnimation.stop();
       settingsAnimation = null;
     }
+  }
+
+  private void onDeviceNameChanged(String deviceName) {
+    devicesListPanel.setDeviceName(deviceName);
+    controller.renameDevice();
   }
 
   private void handleToggleConnection() {

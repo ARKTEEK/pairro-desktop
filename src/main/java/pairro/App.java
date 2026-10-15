@@ -68,7 +68,7 @@ public class App extends Application {
 
     TitleBar titleBar = new TitleBar(primaryStage, APP_TITLE, trayManager::handleClose);
 
-    AppCoordinator controller = createAppCoordinator();
+    AppCoordinator controller = createAppCoordinator(settingsStore);
     DashboardView dashboard = new DashboardView(primaryStage, controller, settingsStore);
 
     ResizableCanvas canvas = new ResizableCanvas();
@@ -107,7 +107,7 @@ public class App extends Application {
     return icons;
   }
 
-  private AppCoordinator createAppCoordinator() {
+  private AppCoordinator createAppCoordinator(SettingsStore settingsStore) {
     DeviceIdentity identity = new DeviceIdentity();
     PairedDeviceStore store = new PairedDeviceStore();
     PairingService pairingService = new PairingService(store);
@@ -156,7 +156,8 @@ public class App extends Application {
         networkManager,
         devices,
         TCP_PORT,
-        identity.getId());
+        identity.getId(),
+        settingsStore::getDeviceName);
 
     controller.setConnectionLifecycle(connectionLifecycle);
 

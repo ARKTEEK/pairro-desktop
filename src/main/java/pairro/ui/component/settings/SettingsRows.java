@@ -1,6 +1,7 @@
 package pairro.ui.component.settings;
 
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,9 +36,27 @@ public final class SettingsRows {
   }
 
   public static VBox textFieldRow(String title, String subtitle, String value, String prompt) {
+    return textFieldRow(title, subtitle, value, prompt, UnaryOperator.identity());
+  }
+
+  public static VBox textFieldRow(
+      String title,
+      String subtitle,
+      String value,
+      String prompt,
+      UnaryOperator<String> onCommit) {
     TextField field = new TextField(value);
     field.setPromptText(prompt);
     field.getStyleClass().add("settings-field");
+
+    Runnable commit = () -> field.setText(onCommit.apply(field.getText()));
+
+    field.setOnAction(e -> commit.run());
+    field.focusedProperty().addListener((obs, wasFocused, focused) -> {
+      if (!focused) {
+        commit.run();
+      }
+    });
 
     VBox row = new VBox(10, textBlock(title, subtitle), field);
     row.getStyleClass().add("settings-row");

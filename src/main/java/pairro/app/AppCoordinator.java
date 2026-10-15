@@ -62,6 +62,12 @@ public class AppCoordinator {
     });
   }
 
+  public void renameDevice() {
+    if (this.connectionLifecycle != null) {
+      this.connectionLifecycle.rename();
+    }
+  }
+
   public void toggleConnection() {
     if (this.connectionLifecycle != null) {
       this.connectionLifecycle.toggle();
