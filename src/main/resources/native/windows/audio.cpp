@@ -136,7 +136,7 @@ bool openEndpointVolume(
 
 extern "C" {
 
-JNIEXPORT jint JNICALL Java_pairro_controller_audio_NativeWindowsAudio_getVolumePercent(
+JNIEXPORT jint JNICALL Java_pairro_audio_NativeWindowsAudio_getVolumePercent(
     JNIEnv* environment,
     jclass) {
   ComScope scope;
@@ -158,7 +158,7 @@ JNIEXPORT jint JNICALL Java_pairro_controller_audio_NativeWindowsAudio_getVolume
   return static_cast<jint>(std::lround(level * 100.0f));
 }
 
-JNIEXPORT void JNICALL Java_pairro_controller_audio_NativeWindowsAudio_setVolumePercent(
+JNIEXPORT void JNICALL Java_pairro_audio_NativeWindowsAudio_setVolumePercent(
     JNIEnv* environment,
     jclass,
     jint percent) {
@@ -177,7 +177,7 @@ JNIEXPORT void JNICALL Java_pairro_controller_audio_NativeWindowsAudio_setVolume
   }
 }
 
-JNIEXPORT jboolean JNICALL Java_pairro_controller_audio_NativeWindowsAudio_isMuted(
+JNIEXPORT jboolean JNICALL Java_pairro_audio_NativeWindowsAudio_isMuted(
     JNIEnv* environment,
     jclass) {
   ComScope scope;
@@ -199,7 +199,7 @@ JNIEXPORT jboolean JNICALL Java_pairro_controller_audio_NativeWindowsAudio_isMut
   return isMuted ? JNI_TRUE : JNI_FALSE;
 }
 
-JNIEXPORT void JNICALL Java_pairro_controller_audio_NativeWindowsAudio_setMuted(
+JNIEXPORT void JNICALL Java_pairro_audio_NativeWindowsAudio_setMuted(
     JNIEnv* environment,
     jclass,
     jboolean isMuted) {
