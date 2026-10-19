@@ -7,7 +7,6 @@ public class SettingsStore extends BaseStore {
   private static final String DEVICE_NAME_KEY = "deviceName";
   private static final String AUTO_START_DISCOVERABILITY_KEY = "autoStartDiscoverability";
   private static final String SHOW_NOTIFICATIONS_KEY = "showNotifications";
-  private static final String KEEP_PC_AWAKE_KEY = "keepPcAwake";
   private static final String CONFIRM_BEFORE_UNPAIRING_KEY = "confirmBeforeUnpairing";
 
   public SettingsStore() {
@@ -65,15 +64,6 @@ public class SettingsStore extends BaseStore {
 
   public synchronized void setShowNotifications(boolean value) {
     this.props.setProperty(SHOW_NOTIFICATIONS_KEY, String.valueOf(value));
-    persist("pairro settings");
-  }
-
-  public synchronized boolean isKeepPcAwake() {
-    return Boolean.parseBoolean(this.props.getProperty(KEEP_PC_AWAKE_KEY, "false"));
-  }
-
-  public synchronized void setKeepPcAwake(boolean value) {
-    this.props.setProperty(KEEP_PC_AWAKE_KEY, String.valueOf(value));
     persist("pairro settings");
   }
 

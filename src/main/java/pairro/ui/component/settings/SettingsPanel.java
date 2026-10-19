@@ -80,12 +80,8 @@ public class SettingsPanel extends VBox {
             SettingsRows.switchRow(
                 "Show notifications",
                 "Notify when a device connects or disconnects",
-                settingsStore.isShowNotifications()),
+                settingsStore.isShowNotifications())),
 
-            SettingsRows.switchRow(
-                "Keep PC awake while connected",
-                "Prevent sleep while a phone is controlling this PC",
-                settingsStore.isKeepPcAwake())),
         new SettingsCard("Safety",
             SettingsRows.switchRow(
                 "Confirm before unpairing",
