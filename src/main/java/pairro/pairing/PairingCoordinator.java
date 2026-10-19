@@ -1,12 +1,18 @@
 package pairro.pairing;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import pairro.device.Device;
 import pairro.device.DeviceDirectory;
 import pairro.network.NetworkManager;
 import pairro.network.NetworkPairingListener;
 import pairro.network.protocol.ProtocolMessenger;
+import pairro.network.security.AuthHandshake;
 import pairro.network.security.CryptoUtils;
+import pairro.network.security.PendingAuth;
 import pairro.network.server.ClientHandler;
+import pairro.store.PairedDeviceStore;
 
 public class PairingCoordinator implements NetworkPairingListener {
   private final PairingService pairingService;
@@ -14,7 +20,7 @@ public class PairingCoordinator implements NetworkPairingListener {
   private final DeviceDirectory devices;
   private final NetworkManager networkManager;
   private final String desktopId;
-  private final String desktopName;
+  private final Supplier<String> desktopName;
 
   private DashboardEventListener eventListener;
 
@@ -24,7 +30,7 @@ public class PairingCoordinator implements NetworkPairingListener {
       DeviceDirectory devices,
       NetworkManager networkManager,
       String desktopId,
-      String desktopName) {
+      Supplier<String> desktopName) {
     this.pairingService = pairingService;
     this.messenger = messenger;
     this.devices = devices;
@@ -46,7 +52,7 @@ public class PairingCoordinator implements NetworkPairingListener {
     String addressKey = client.getAddress().getHostAddress();
     PairingService.Challenge challenge = pairingService.createChallenge(addressKey, clientPublicKeyStr);
 
-    messenger.sendPairChallenge(client, desktopId, desktopName, challenge.desktopPublicKey);
+    messenger.sendPairChallenge(client, desktopId, desktopName.get(), challenge.desktopPublicKey);
     devices.addPendingClient(addressKey, client);
 
     if (eventListener != null) {
@@ -55,21 +61,57 @@ public class PairingCoordinator implements NetworkPairingListener {
   }
 
   @Override
-  public void onAuth(
-      String deviceId,
-      String token,
-      ClientHandler client) {
-    boolean ok = pairingService.verifyAuth(deviceId, token);
+  public void onAuthInit(String deviceId, String clientNonce, ClientHandler client) {
+    Optional<PairedDeviceStore.PairedDevice> paired = deviceId == null
+        ? Optional.empty()
+        : pairingService.findPaired(deviceId);
+    String certificateFingerprint = client.getCertificateFingerprint();
 
-    if (!ok) {
-      messenger.sendAuthResult(client, false, "Unknown device or invalid token");
-      client.close();
+    if (paired.isEmpty() || !AuthHandshake.isValidNonce(clientNonce) || certificateFingerprint == null) {
+      rejectAuth(client);
 
       return;
     }
 
+    PendingAuth pending = new PendingAuth(
+        deviceId,
+        clientNonce,
+        AuthHandshake.newNonce(),
+        certificateFingerprint);
+
+    client.beginAuth(pending);
+
+    String serverProof = AuthHandshake.proof(paired.get().token(), AuthHandshake.ROLE_SERVER, pending);
+
+    messenger.sendAuthChallenge(client, pending.serverNonce(), serverProof);
+  }
+
+  @Override
+  public void onAuthProof(String clientProof, ClientHandler client) {
+    PendingAuth pending = client.takePendingAuth();
+
+    Optional<PairedDeviceStore.PairedDevice> paired = pending == null
+        ? Optional.empty()
+        : pairingService.findPaired(pending.deviceId());
+
+    if (paired.isEmpty()) {
+      rejectAuth(client);
+
+      return;
+    }
+
+    String token = paired.get().token();
+    String expectedProof = AuthHandshake.proof(token, AuthHandshake.ROLE_CLIENT, pending);
+
+    if (!AuthHandshake.matches(expectedProof, clientProof)) {
+      rejectAuth(client);
+
+      return;
+    }
+
+    String deviceId = pending.deviceId();
     String addressKey = client.getAddress().getHostAddress();
-    String deviceName = pairingService.findPaired(deviceId).get().deviceName();
+    String deviceName = paired.get().deviceName();
 
     Device existingConnected = devices.getConnectedDevice();
 
@@ -84,6 +126,11 @@ public class PairingCoordinator implements NetworkPairingListener {
     if (eventListener != null) {
       eventListener.onConnectionConflict(existingConnected, deviceName, addressKey, deviceId, client);
     }
+  }
+
+  private void rejectAuth(ClientHandler client) {
+    messenger.sendAuthResult(client, false, "Authentication failed");
+    client.close();
   }
 
   public void resolveConnectionConflict(
@@ -126,7 +173,7 @@ public class PairingCoordinator implements NetworkPairingListener {
       networkManager.setTrustedUdpAddress(client.getAddress());
 
       client.markAuthenticated();
-      messenger.sendPairSuccess(client, desktopId, desktopName, token);
+      messenger.sendPairSuccess(client, desktopId, desktopName.get(), token);
       devices.markPaired(addressKey, deviceName, deviceId);
 
       notifyDevicesChanged();

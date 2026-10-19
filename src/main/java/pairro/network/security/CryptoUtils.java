@@ -2,12 +2,14 @@ package pairro.network.security;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.Certificate;
 import java.security.spec.ECGenParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -56,6 +58,21 @@ public class CryptoUtils {
 
   public static String encodePublicKey(PublicKey publicKey) {
     return Base64.getEncoder().encodeToString(publicKey.getEncoded());
+  }
+
+  public static String fingerprint(Certificate certificate) {
+    try {
+      byte[] digest = MessageDigest.getInstance("SHA-256").digest(certificate.getEncoded());
+      StringBuilder hex = new StringBuilder(digest.length * 2);
+
+      for (byte value : digest) {
+        hex.append(String.format("%02x", value));
+      }
+
+      return hex.toString();
+    } catch (GeneralSecurityException e) {
+      return null;
+    }
   }
 
   public static String calculatePin(PrivateKey localPrivateKey, PublicKey remotePublicKey) {

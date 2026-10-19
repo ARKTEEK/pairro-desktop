@@ -68,31 +68,49 @@ public class InboundMessageRouter {
 
     Protocol.Decoded decoded = Protocol.decode(data);
 
-    if ("PAIR_REQUEST".equals(decoded.type)) {
-      routePairRequest(decoded, client);
-    } else if ("AUTH".equals(decoded.type)) {
-      routeAuth(decoded, client);
-    } else if ("PING".equals(decoded.type)) {
-      routePing(client);
-    } else {
-      routeApplicationData(data, client);
+    switch (decoded.type) {
+      case "PAIR_REQUEST": {
+        routePairRequest(decoded, client);
+        break;
+      }
+      case "PING": {
+        routePing(client);
+        break;
+      }
+      default: {
+        routeApplicationData(data, client);
+        break;
+      }
     }
   }
 
   private void routeUnauthenticated(String data, ClientHandler client) {
     Protocol.Decoded decoded = Protocol.decode(data);
 
-    if ("PAIR_REQUEST".equals(decoded.type)) {
-      routePairRequest(decoded, client);
-    } else if ("AUTH".equals(decoded.type)) {
-      routeAuth(decoded, client);
-    } else if ("PING".equals(decoded.type)) {
-      routePing(client);
-    } else {
-      System.err.println("[Security] Closing unauthenticated connection from "
-          + client.getAddress().getHostAddress() + ": unexpected message");
+    switch (decoded.type) {
+      case "PAIR_REQUEST": {
+        routePairRequest(decoded, client);
+        break;
+      }
+      case "AUTH_INIT": {
+        routeAuthInit(decoded, client);
+        break;
+      }
+      case "AUTH_PROOF": {
+        routeAuthProof(decoded, client);
+        break;
+      }
+      case "PING": {
+        routePing(client);
+        break;
+      }
+      default: {
+        System.err.println("[Security] Closing unauthenticated connection from "
+            + client.getAddress().getHostAddress() + ": unexpected message");
 
-      client.close();
+        client.close();
+        break;
+      }
     }
   }
 
@@ -112,12 +130,18 @@ public class InboundMessageRouter {
     }
   }
 
-  private void routeAuth(Protocol.Decoded decoded, ClientHandler client) {
+  private void routeAuthInit(Protocol.Decoded decoded, ClientHandler client) {
     if (pairingListener != null) {
-      pairingListener.onAuth(
-          decoded.fields.get("deviceId"),
-          decoded.fields.get("token"),
-          client);
+      pairingListener.onAuthInit(
+        decoded.fields.get("deviceId"),
+        decoded.fields.get("nonce"),
+        client);
+    }
+  }
+
+  private void routeAuthProof(Protocol.Decoded decoded, ClientHandler client) {
+    if (pairingListener != null) {
+      pairingListener.onAuthProof(decoded.fields.get("proof"), client);
     }
   }
 

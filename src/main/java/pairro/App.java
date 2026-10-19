@@ -49,7 +49,6 @@ import pairro.ui.view.DashboardView;
 public class App extends Application {
   private static final int TCP_PORT = 28401;
   private static final int UDP_PORT = 28402;
-  private static final String DESKTOP_NAME = "DesktopServer";
   private static final String APP_TITLE = "Pairro";
 
   @Override
@@ -129,63 +128,70 @@ public class App extends Application {
 
     ProtocolMessenger messenger = new ProtocolMessenger();
     InboundMessageRouter messageRouter = new InboundMessageRouter(
-        mouseInputHandler,
-        keyboardInputHandler,
-        audioHandler,
-        clipboardHandler,
-        messenger);
+      mouseInputHandler,
+      keyboardInputHandler,
+      audioHandler,
+      clipboardHandler,
+      messenger);
     UDPSessionState udpSession = new UDPSessionState();
 
     NetworkManager networkManager = new NetworkManager(TCP_PORT, UDP_PORT, messageRouter, udpSession);
     PairingCoordinator pairing = new PairingCoordinator(
-        pairingService,
-        messenger,
-        devices,
-        networkManager,
-        identity.getId(),
-        DESKTOP_NAME);
+      pairingService,
+      messenger,
+      devices,
+      networkManager,
+      identity.getId(),
+      settingsStore::getDeviceName);
 
     AppCoordinator controller = new AppCoordinator(pairing, devices);
 
     DeviceScanner scanner = new DeviceScanner(
-        (id, name, address) -> {
-          controller.onDeviceDiscovered(id, name, address);
-        },
-        identity.getId());
+      (id, name, address) -> {
+         controller.onDeviceDiscovered(id, name, address);
+      },
+      identity.getId());
 
     DeviceBroadcaster broadcaster = new DeviceBroadcaster();
     ConnectionLifecycleManager connectionLifecycle = new ConnectionLifecycleManager(
-        broadcaster,
-        scanner,
-        networkManager,
-        devices,
-        TCP_PORT,
-        identity.getId(),
-        settingsStore::getDeviceName);
+      broadcaster,
+      scanner,
+      networkManager,
+      devices,
+      TCP_PORT,
+      identity.getId(),
+      settingsStore::getDeviceName);
 
     controller.setConnectionLifecycle(connectionLifecycle);
 
     networkManager.setPairingListener(new NetworkPairingListener() {
       @Override
       public void onPairRequest(
-          String deviceId,
-          String deviceName,
-          String publicKey,
-          ClientHandler client) {
+        String deviceId,
+        String deviceName,
+        String publicKey,
+        ClientHandler client) {
         pairing.onPairRequest(deviceId, deviceName, publicKey, client);
       }
 
       @Override
-      public void onAuth(
-          String deviceId,
-          String token,
-          ClientHandler client) {
-        networkManager.setTrustedUdpAddress(client.getAddress());
-        pairing.onAuth(deviceId, token, client);
+      public void onAuthInit(
+        String deviceId,
+        String clientNonce,
+        ClientHandler client) {
+        pairing.onAuthInit(deviceId, clientNonce, client);
       }
 
       @Override
-      public void onDisconnect(ClientHandler client) {
+      public void onAuthProof(
+        String proof,
+        ClientHandler client) {
+        pairing.onAuthProof(proof, client);
+      }
+
+      @Override
+      public void onDisconnect(
+        ClientHandler client) {
         pairing.onDisconnect(client);
       }
     });

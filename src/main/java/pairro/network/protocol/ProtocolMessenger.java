@@ -38,6 +38,15 @@ public class ProtocolMessenger {
     client.send(Protocol.encode(ok ? "AUTH_OK" : "AUTH_FAIL", fields));
   }
 
+  public void sendAuthChallenge(ClientHandler client, String serverNonce, String proof) {
+    Map<String, String> fields = new LinkedHashMap<>();
+
+    fields.put("nonce", serverNonce);
+    fields.put("proof", proof);
+
+    client.send(Protocol.encode("AUTH_CHALLENGE", fields));
+  }
+
   public void sendPairDecision(ClientHandler client, boolean accepted, String reason) {
     Map<String, String> fields = new LinkedHashMap<>();
 

@@ -52,12 +52,6 @@ public class PairingService {
     return token;
   }
 
-  public boolean verifyAuth(String deviceId, String token) {
-    Optional<PairedDeviceStore.PairedDevice> stored = pairedDevices.find(deviceId);
-
-    return stored.isPresent() && stored.get().token().equals(token);
-  }
-
   public Optional<PairedDeviceStore.PairedDevice> findPaired(String deviceId) {
     return pairedDevices.find(deviceId);
   }
