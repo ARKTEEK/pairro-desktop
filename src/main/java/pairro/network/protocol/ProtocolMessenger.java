@@ -59,6 +59,10 @@ public class ProtocolMessenger {
     client.send(Protocol.encode("PAIR_DECISION", fields));
   }
 
+  public void sendDisconnect(ClientHandler client) {
+    client.send(Protocol.encode("DISCONNECT", Collections.emptyMap()));
+  }
+
   public void sendPong(ClientHandler client) {
     client.send(Protocol.encode("PONG", Collections.emptyMap()));
   }

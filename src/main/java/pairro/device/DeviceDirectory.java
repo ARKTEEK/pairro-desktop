@@ -50,6 +50,10 @@ public class DeviceDirectory {
     return deviceState.findByClientId(connectedDeviceId);
   }
 
+  public ClientHandler getConnectedClient(String deviceId) {
+    return deviceState.getConnectedClient(deviceId);
+  }
+
   public boolean hasConnectedDevice() {
     return connectedDeviceId != null;
   }

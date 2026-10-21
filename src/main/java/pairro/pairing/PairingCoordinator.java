@@ -203,6 +203,12 @@ public class PairingCoordinator implements NetworkPairingListener {
       return;
     }
 
+    ClientHandler client = devices.getConnectedClient(connected.getClientId());
+
+    if (client != null) {
+      messenger.sendDisconnect(client);
+    }
+
     devices.disconnectClient(connected.getClientId());
     networkManager.clearTrustedUdpAddress();
 
