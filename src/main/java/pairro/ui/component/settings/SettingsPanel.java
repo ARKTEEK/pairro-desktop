@@ -45,12 +45,14 @@ public class SettingsPanel extends VBox {
             SettingsRows.switchRow(
                 "Open on Windows startup",
                 "Launch Pairro when you sign in to Windows",
-                settingsStore.isOpenOnStartup()),
+                settingsStore.isOpenOnStartup(),
+                settingsStore::setOpenOnStartup),
 
             SettingsRows.switchRow(
                 "Open in tray",
                 "Start minimized in the system tray instead of showing the window",
-                settingsStore.isOpenInTray()),
+                settingsStore.isOpenInTray(),
+                settingsStore::setOpenInTray),
             closeToTrayRow),
 
         new SettingsCard("Device",
@@ -80,13 +82,15 @@ public class SettingsPanel extends VBox {
             SettingsRows.switchRow(
                 "Show notifications",
                 "Notify when a device connects or disconnects",
-                settingsStore.isShowNotifications())),
+                settingsStore.isShowNotifications(),
+                settingsStore::setShowNotifications)),
 
         new SettingsCard("Safety",
             SettingsRows.switchRow(
                 "Confirm before unpairing",
                 "Ask first when removing a paired device",
-                settingsStore.isConfirmBeforeUnpairing())));
+                settingsStore.isConfirmBeforeUnpairing(),
+                settingsStore::setConfirmBeforeUnpairing)));
 
     Label version = new Label("Pairro 1.0");
     version.getStyleClass().add("settings-version");
