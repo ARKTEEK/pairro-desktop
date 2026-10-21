@@ -16,12 +16,11 @@ import javax.imageio.ImageIO;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
-
 import pairro.store.SettingsStore;
 import pairro.ui.icon.IconLoader;
 
 public class TrayManager {
-  private static final String TOOLTIP = "pairro";
+  private static final String TOOLTIP = "Pairro";
 
   private final Stage stage;
   private final SettingsStore settingsStore;
@@ -49,6 +48,10 @@ public class TrayManager {
     stage.close();
   }
 
+  public void restoreWindow() {
+    Platform.runLater(this::showWindow);
+  }
+
   private void showWindow() {
     removeTrayIcon();
 
@@ -69,7 +72,7 @@ public class TrayManager {
       return true;
     }
 
-    MenuItem openItem = new MenuItem("Open pairro");
+    MenuItem openItem = new MenuItem("Open Pairro");
     openItem.addActionListener(e -> Platform.runLater(this::showWindow));
 
     MenuItem exitItem = new MenuItem("Exit");

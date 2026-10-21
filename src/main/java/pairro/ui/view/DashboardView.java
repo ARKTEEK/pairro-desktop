@@ -43,13 +43,12 @@ public class DashboardView implements DashboardEventListener {
   private final SettingsStore settingsStore;
 
   public DashboardView(
-    Stage ownerStage,
-    AppCoordinator controller,
-    SettingsStore settingsStore) {
+      Stage ownerStage,
+      AppCoordinator controller,
+      SettingsStore settingsStore) {
     this.controller = controller;
     this.settingsStore = settingsStore;
 
-    this.controller.setEventListener(this);
     this.controller.setConnectionStateListener(this::onConnectionStateChanged);
     this.controller.setConnectionTransitionListener(this::onConnectionTransitionStarted);
 

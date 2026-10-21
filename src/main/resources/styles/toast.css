@@ -1,0 +1,65 @@
+.toast-pane {
+  -fx-pref-width: 360px;
+  -fx-pref-height: 100px;
+  -fx-min-width: 360px;
+  -fx-min-height: 100px;
+  -fx-max-width: 360px;
+  -fx-max-height: 100px;
+  -fx-background-color: transparent;
+}
+
+.toast-strip {
+  -fx-pref-height: 30px;
+  -fx-min-height: 30px;
+  -fx-max-height: 30px;
+  -fx-background-color: linear-gradient(to right, #4E1238, #7A1E52);
+  -fx-background-radius: 18px 18px 0 0;
+  -fx-padding: 0 16px 0 16px;
+}
+
+.toast-caption {
+  -fx-text-fill: #FFD6E5;
+  -fx-font-family: "Plus Jakarta Sans";
+  -fx-font-weight: bold;
+  -fx-font-size: 10px;
+}
+
+.toast-body {
+  -fx-background-color: #FFF0F5;
+  -fx-background-radius: 0 0 18px 18px;
+  -fx-padding: 10px 16px 10px 16px;
+}
+
+.toast-icon-tile {
+  -fx-pref-width: 46px;
+  -fx-pref-height: 46px;
+  -fx-min-width: 46px;
+  -fx-min-height: 46px;
+  -fx-background-color: rgba(194, 24, 91, 0.12);
+  -fx-background-radius: 14px;
+}
+
+.toast-title {
+  -fx-text-fill: #3A1530;
+  -fx-font-family: "Plus Jakarta Sans";
+  -fx-font-weight: bold;
+  -fx-font-size: 15px;
+}
+
+.toast-message {
+  -fx-text-fill: #8D5A74;
+  -fx-font-family: "Inter";
+  -fx-font-size: 13px;
+}
+
+.toast-progress-track {
+  -fx-pref-width: 360px;
+  -fx-pref-height: 3px;
+  -fx-max-width: 360px;
+  -fx-max-height: 3px;
+}
+
+.toast-border-overlay {
+  -fx-border-color: rgba(194, 24, 91, 0.25);
+  -fx-border-radius: 18px;
+}

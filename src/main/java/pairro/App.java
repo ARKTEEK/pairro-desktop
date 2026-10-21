@@ -36,6 +36,9 @@ import pairro.network.protocol.InboundMessageRouter;
 import pairro.network.protocol.ProtocolMessenger;
 import pairro.network.server.ClientHandler;
 import pairro.network.session.UDPSessionState;
+import pairro.notification.NotificationEventListener;
+import pairro.notification.NotificationService;
+import pairro.notification.toast.ToastNotifier;
 import pairro.pairing.PairingCoordinator;
 import pairro.pairing.PairingService;
 import pairro.store.PairedDeviceStore;
@@ -69,6 +72,9 @@ public class App extends Application {
 
     AppCoordinator controller = createAppCoordinator(settingsStore);
     DashboardView dashboard = new DashboardView(primaryStage, controller, settingsStore);
+
+    NotificationService notificationService = new NotificationService(settingsStore, new ToastNotifier(trayManager::restoreWindow));
+    controller.setEventListener(new NotificationEventListener(dashboard, notificationService));
 
     ResizableCanvas canvas = new ResizableCanvas();
     canvas.getStyleClass().add("white-canvas");
