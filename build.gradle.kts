@@ -51,7 +51,7 @@ runtime {
     imageOptions = listOf("--icon", "src/main/resources/icon.ico")
     installerOptions = listOf(
       "--vendor", "Pairro",
-      "--app-version", "1.0.1",
+      "--app-version", "0.9.0",
       "--win-menu",
       "--win-shortcut",
       "--win-dir-chooser",
