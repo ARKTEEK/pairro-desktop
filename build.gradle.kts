@@ -2,6 +2,7 @@ plugins {
   application
   java
   id("org.openjfx.javafxplugin") version "0.1.0"
+  id("org.beryx.runtime") version "1.13.1"
 }
 
 repositories {
@@ -20,7 +21,7 @@ javafx {
 }
 
 application {
-  mainClass.set("pairro.App")
+  mainClass.set("pairro.Launcher")
   applicationName = "Pairro"
 }
 
@@ -30,6 +31,31 @@ java {
   }
 }
 
-tasks.test {
-  useJUnitPlatform()
+runtime {
+  options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
+  modules.set(listOf(
+    "java.desktop",
+    "java.prefs",
+    "java.datatransfer",
+    "java.naming",
+    "java.logging",
+    "java.scripting",
+    "java.xml",
+    "jdk.unsupported",
+    "jdk.crypto.ec"
+  ))
+  jpackage {
+    imageName = "Pairro"
+    installerName = "Pairro"
+    installerType = "exe"
+    imageOptions = listOf("--icon", "src/main/resources/icon.ico")
+    installerOptions = listOf(
+      "--vendor", "Pairro",
+      "--app-version", "1.0.1",
+      "--win-menu",
+      "--win-shortcut",
+      "--win-dir-chooser",
+      "--win-per-user-install"
+    )
+  }
 }
